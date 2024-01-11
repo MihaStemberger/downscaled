@@ -6,3 +6,10 @@ Hardware
 
  - Beurer BF 600
    ![image](https://github.com/MihaStemberger/downscaled/assets/9533590/f8d1a71a-7618-4bff-a527-b1f5549ecb26)
+
+Software
+ - Proxmox:
+   - Ubuntu server
+
+Solution developed with:
+ - Python
