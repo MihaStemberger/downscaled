@@ -62,5 +62,8 @@ Software
 
    If that is the case you have successfully made a connection to BF600 device
 
+## Database setup
 
-   
+```shell
+sudo docker run --name database -e POSTGRES_PASSWORD=mysecretpassword -d -p 5432:5432 postgres:14.12 && sleep 5 && cat init.sql | sudo docker exec -i database psql -U postgres
+```
