@@ -1,17 +1,21 @@
 import asyncio
 import subprocess
+import sys
 
 bluetoothctl_process = None
 script_process = None
 
 
-def start_detached_bluetoothctl():
+async def start_detached_bluetoothctl():
     global bluetoothctl_process
-    bluetoothctl_process = subprocess.Popen(["bluetoothctl"], stdin=subprocess.PIPE, stdout=subprocess.PIPE,
-                                            stderr=subprocess.PIPE, close_fds=True)
+    bluetoothctl_process = subprocess.Popen(["bluetoothctl"],
+                                            stdin=subprocess.PIPE,
+                                            stdout=subprocess.PIPE,
+                                            stderr=subprocess.PIPE,
+                                            close_fds=True)
 
 
-def kill_bluetoothctl_process():
+async def kill_bluetoothctl_process():
     global bluetoothctl_process
     if bluetoothctl_process:
         bluetoothctl_process.terminate()
@@ -21,22 +25,24 @@ def kill_bluetoothctl_process():
             bluetoothctl_process.kill()
 
 
-async def execute_python_script():
+async def execute_python_script(device_address, user_pin):
     global script_process
-    script_process = subprocess.run(["python", "main.py"])
+    script_process = subprocess.run(["python", "main.py", device_address, user_pin])
 
 
-async def main():
-    print(f"Starting")
-    # Start bluetoothctl
-    start_detached_bluetoothctl()
-    await asyncio.sleep(5)
+async def main(device_address, user_pin):
+    print(f"Runner is starting")
 
-    # Execute your Python script
-    await execute_python_script()
+    try:
+        # Start bluetoothctl
+        await start_detached_bluetoothctl()
 
-    # Stop bluetoothctl
-    kill_bluetoothctl_process()
+        # Execute your Python script
+        await execute_python_script(device_address, user_pin)
+
+    finally:
+        # Stop bluetoothctl
+        await kill_bluetoothctl_process()
 
 
-asyncio.run(main())
+asyncio.run(main(sys.argv[1], sys.argv[2]))
