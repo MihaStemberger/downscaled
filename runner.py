@@ -27,7 +27,7 @@ async def kill_bluetoothctl_process():
 
 async def execute_python_script(device_address, user_pin):
     global script_process
-    script_process = subprocess.run(["python", "main.py", device_address, user_pin])
+    script_process = subprocess.run(["python3", "main.py", device_address, user_pin])
 
 
 async def main(device_address, user_pin):
